@@ -1,0 +1,36 @@
+services:
+  comfyui:
+    build:
+      context: .
+      args:
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
+        NO_PROXY: ${NO_PROXY}
+    image: comfyui:latest
+    container_name: comfyui
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    ports:
+      - "8188:8188"
+    volumes:
+      - ./models/checkpoints:/app/ComfyUI/models/checkpoints
+      - ./models/vae:/app/ComfyUI/models/vae
+      - ./models/loras:/app/ComfyUI/models/loras
+      - ./models/controlnet:/app/ComfyUI/models/controlnet
+      - ./models/faces:/app/ComfyUI/models/faces
+      - ./input:/app/ComfyUI/input
+      - ./output:/app/ComfyUI/output
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    restart: unless-stopped
+    networks:
+      - comfyui-network
+
+networks:
+  comfyui-network:
+    driver: bridge

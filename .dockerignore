@@ -1,0 +1,15 @@
+.git
+.gitignore
+__pycache__
+.pyc
+.pyo
+.pyd
+.DS_Store
+.env
+.venv
+venv
+models.safetensors
+models.ckpt
+models.pt
+output
+input
